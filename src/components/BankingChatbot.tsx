@@ -9,7 +9,7 @@ type Msg = { role: "user" | "assistant"; content: string };
 const BankingChatbot = () => {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Msg[]>([
-    { role: "assistant", content: "Hi! 👋 I'm your KodBank AI assistant. Ask me anything about banking, finances, or your account!" },
+    { role: "assistant", content: "Hi! 👋 I'm your KodBank AI assistant. I can **check your balance**, **deposit money**, **transfer funds**, and **show transaction history**. Just ask!" },
   ]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -42,13 +42,17 @@ const BankingChatbot = () => {
     };
 
     try {
+      const token = localStorage.getItem("kodbank_token");
       const allMessages = [...messages, userMsg].map(({ role, content }) => ({ role, content }));
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+      };
+      if (token) headers["x-kodbank-token"] = token;
+
       const resp = await fetch(CHAT_URL, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        },
+        headers,
         body: JSON.stringify({ messages: allMessages }),
       });
 
@@ -97,7 +101,6 @@ const BankingChatbot = () => {
 
   return (
     <>
-      {/* Floating button */}
       {!open && (
         <button
           onClick={() => setOpen(true)}
@@ -107,10 +110,8 @@ const BankingChatbot = () => {
         </button>
       )}
 
-      {/* Chat window */}
       {open && (
         <div className="fixed bottom-6 right-6 z-50 w-[380px] max-w-[calc(100vw-2rem)] h-[520px] max-h-[calc(100vh-4rem)] flex flex-col glass rounded-2xl shadow-card border border-border/50 overflow-hidden animate-slide-in">
-          {/* Header */}
           <div className="flex items-center justify-between px-4 py-3 border-b border-border/50 bg-gold-gradient/10">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-xl bg-gold-gradient flex items-center justify-center shadow-gold">
@@ -118,7 +119,7 @@ const BankingChatbot = () => {
               </div>
               <div>
                 <p className="text-sm font-semibold text-foreground">KodBank AI</p>
-                <p className="text-[10px] text-muted-foreground">Banking Assistant</p>
+                <p className="text-[10px] text-muted-foreground">Can check balance, deposit & transfer</p>
               </div>
             </div>
             <button onClick={() => setOpen(false)} className="text-muted-foreground hover:text-foreground transition-colors">
@@ -126,7 +127,6 @@ const BankingChatbot = () => {
             </button>
           </div>
 
-          {/* Messages */}
           <div className="flex-1 overflow-y-auto px-4 py-3 space-y-3">
             {messages.map((msg, i) => (
               <div key={i} className={`flex gap-2 ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
@@ -170,7 +170,6 @@ const BankingChatbot = () => {
             <div ref={bottomRef} />
           </div>
 
-          {/* Input */}
           <div className="px-3 py-3 border-t border-border/50">
             <form
               onSubmit={(e) => {
@@ -182,7 +181,7 @@ const BankingChatbot = () => {
               <input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
-                placeholder="Ask about banking..."
+                placeholder="Ask about balance, deposit, transfer..."
                 className="flex-1 rounded-xl bg-muted/40 border border-border/50 px-3 py-2 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-gold/50"
                 disabled={isLoading}
               />

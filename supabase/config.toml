@@ -11,3 +11,12 @@ verify_jwt = false
 
 [functions.kodbank-chat]
 verify_jwt = false
+
+[functions.kodbank-deposit]
+verify_jwt = false
+
+[functions.kodbank-transfer]
+verify_jwt = false
+
+[functions.kodbank-transactions]
+verify_jwt = false
