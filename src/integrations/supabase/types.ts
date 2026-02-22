@@ -47,6 +47,36 @@ export type Database = {
         }
         Relationships: []
       }
+      transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          description: string | null
+          from_username: string | null
+          id: string
+          to_username: string
+          type: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          description?: string | null
+          from_username?: string | null
+          id?: string
+          to_username: string
+          type: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          description?: string | null
+          from_username?: string | null
+          id?: string
+          to_username?: string
+          type?: string
+        }
+        Relationships: []
+      }
       user_token: {
         Row: {
           created_at: string | null
