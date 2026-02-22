@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import BankingChatbot from "@/components/BankingChatbot";
 import { useNavigate } from "react-router-dom";
 import confetti from "canvas-confetti";
 import {
@@ -249,6 +250,8 @@ const Dashboard = () => {
       <footer className="text-center py-4 text-xs text-muted-foreground border-t border-border/30">
         KodBank © 2024 · Secured with bcrypt & JWT
       </footer>
+
+      <BankingChatbot />
     </div>
   );
 };
