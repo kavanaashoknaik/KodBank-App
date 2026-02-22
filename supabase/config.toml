@@ -1,1 +1,13 @@
 project_id = "pomvobmwzlaihyrkrlia"
+
+[functions.kodbank-register]
+verify_jwt = false
+
+[functions.kodbank-login]
+verify_jwt = false
+
+[functions.kodbank-balance]
+verify_jwt = false
+
+[functions.kodbank-chat]
+verify_jwt = false
